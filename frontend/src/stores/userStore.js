@@ -63,12 +63,17 @@ export const useUserStore = defineStore('user', {
         });
         const index = this.users.findIndex(u => u.id === user.id);
         this.users[index] = response.data;
+    
+        if (this.loggedInUser && this.loggedInUser.id === user.id) {
+          this.loggedInUser = response.data;
+        }
       } catch (error) {
         console.error('Error updating user:', error);
       }
     },
+    
 
-    // Nueva acción para cambiar la contraseña
+   
     async updatePassword(currentPassword, newPassword, newPasswordConfirmation) {
       try {
         const response = await api.put('/change-password', {
@@ -80,10 +85,10 @@ export const useUserStore = defineStore('user', {
         });
 
         console.log('Password changed successfully', response.data);
-        return response.data; // Retorna la respuesta del servidor si es necesario
+        return response.data; 
       } catch (error) {
         console.error('Error changing password:', error.response ? error.response.data : error);
-        throw error; // Lanza el error para manejarlo en el componente si es necesario
+        throw error; 
       }
     },
   },
